@@ -333,6 +333,28 @@ def download_result(job_id):
     
     return send_file(output_file, as_attachment=True, download_name='inferred_schema.json')
 
+@app.route('/ground-truth')
+def get_ground_truth():
+    """Get ground truth schema for comparison"""
+    # Look for ground truth files in gt_schema directory
+    gt_dir = 'gt_schema'
+    if not os.path.exists(gt_dir):
+        return jsonify({'error': 'Ground truth schema not found'}), 404
+    
+    # Find the first ground truth JSON file
+    gt_files = [f for f in os.listdir(gt_dir) if f.endswith('.json') and 'golden_truth' in f]
+    if not gt_files:
+        return jsonify({'error': 'No ground truth schema files found'}), 404
+    
+    # Load the first available ground truth file
+    gt_file = os.path.join(gt_dir, gt_files[0])
+    try:
+        with open(gt_file, 'r', encoding='utf-8') as f:
+            gt_schema = json.load(f)
+        return jsonify(gt_schema)
+    except Exception as e:
+        return jsonify({'error': f'Error loading ground truth: {str(e)}'}), 500
+
 def similar(a, b):
     if not a or not b: return 0
     return SequenceMatcher(None, a.lower(), b.lower()).ratio()

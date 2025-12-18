@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schema Discovery - LLM-Powered Graph Schema Inference</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -60,15 +61,69 @@
                     <button class="btn btn-secondary" id="newAnalysisBtn">New Analysis</button>
                 </div>
                 
-                <div class="schema-viewer">
-                    <div class="schema-section">
-                        <h3>Node Types</h3>
-                        <div id="nodeTypes"></div>
+                <!-- Tab Navigation -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="schema">Schema View</button>
+                    <button class="tab-btn" data-tab="graph">Graph Visualization</button>
+                    <button class="tab-btn" data-tab="comparison">Algorithm Validation</button>
+                </div>
+                
+                <!-- Schema Tab Content -->
+                <div class="tab-content active" id="schemaTab">
+                    <div class="schema-viewer">
+                        <div class="schema-section">
+                            <h3>Node Types</h3>
+                            <div id="nodeTypes"></div>
+                        </div>
+                        <div class="schema-section">
+                            <h3>Edge Types</h3>
+                            <div id="edgeTypes"></div>
+                        </div>
                     </div>
-                    <div class="schema-section">
-                        <h3>Edge Types</h3>
-                        <div id="edgeTypes"></div>
+                </div>
+                
+                <!-- Graph Tab Content -->
+                <div class="tab-content hidden" id="graphTab">
+                    <div class="graph-container">
+                        <div id="graphNetwork"></div>
+                        <div class="graph-legend">
+                            <div class="legend-item">
+                                <div class="legend-node node-legend"></div>
+                                <span>Node Types</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-edge edge-legend"></div>
+                                <span>Edge Types</span>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                
+                <!-- Comparison Tab Content -->
+                <div class="tab-content hidden" id="comparisonTab">
+                    <div class="comparison-header">
+                        <h3>Algorithm Performance: Inferred vs Ground Truth</h3>
+                        <div class="comparison-metrics" id="comparisonMetrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-graphs">
+                        <div class="comparison-graph-panel">
+                            <h4>🔮 Inferred Schema (Your Algorithm)</h4>
+                            <div class="graph-container-small">
+                                <div id="inferredGraphNetwork"></div>
+                            </div>
+                        </div>
+                        <div class="comparison-graph-panel">
+                            <h4>✅ Ground Truth Schema</h4>
+                            <div class="graph-container-small">
+                                <div id="groundTruthGraphNetwork"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-details" id="comparisonDetails"></div>
                 </div>
             </div>
 
